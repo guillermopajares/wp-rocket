@@ -57,6 +57,33 @@ function rocket_cdn_file( $url ) {
 	return $url;
 }
 
+add_filter( 'wp_get_attachment_image_src', 'rocket_cdn_attachment_image_src', PHP_INT_MAX );
+/**
+ * Replace URL by CDN of images displayed using wp_get_attachment_image_src
+ *
+ * @since 2.9.2
+ * @author Remy Perona
+ * @source https://github.com/wp-media/wp-rocket/issues/271#issuecomment-269849927
+ *
+ * @param array $image An array containing the src, width and height of the image.
+ * @return array Array with updated src URL
+ */
+function rocket_cdn_attachment_image_src( $image ) {
+	if ( ! (bool) $image ) {
+		return $image;
+	}
+
+	$zones = array( 'all', 'images' );
+
+	if ( ! (bool) get_rocket_cdn_cnames( $zones ) ) {
+		return $image;
+	}
+
+	$image[0] = get_rocket_cdn_url( $image[0], $zones );
+
+	return $image;
+}
+
 /**
  * Replace srcset URLs by CDN URLs for WP responsive images
  *
@@ -173,12 +200,12 @@ function rocket_cdn_inline_styles( $html ) {
 	);
 
 	if ( $cnames = get_rocket_cdn_cnames( $zone ) ) {
-    	preg_match_all( '/url\((?![\'"]?data)[\"\']?([^\)\"\']+)[\"\']?\)/i', $html, $matches );
+    	preg_match_all( '/url\((?![\'\"]?data)[\"\']?([^\)\"\']+)[\"\']?\)/i', $html, $matches );
 
         if ( ( bool ) $matches ) {
             $i = 0;
             foreach( $matches[1] as $url ) {
-            	$url      = trim( $url, " \t\n\r\0\x0B\"'" );
+            	$url      = trim( $url, " \t\n\r\0\x0B\"'&quot;#039;" );
             	$url      = get_rocket_cdn_url( $url, $zone );
             	$property = str_replace( $matches[1][$i], $url, $matches[0][$i] );
             	$html     = str_replace( $matches[0][$i], $property, $html );
@@ -220,7 +247,7 @@ function rocket_cdn_custom_files( $html ) {
         $filetypes = apply_filters( 'rocket_cdn_custom_filetypes', array( 'mp3', 'ogg', 'mp4', 'm4v', 'avi', 'mov', 'flv', 'swf', 'webm', 'pdf', 'doc', 'docx', 'txt', 'zip', 'tar', 'bz2', 'tgz', 'rar' ) );
         $filetypes = implode( '|', $filetypes );
 
-        preg_match_all( '#<a[^>]+?href=[\'"]?(.*\.(?:' . $filetypes . '))[\'"]?[^>]*>#i', $html, $matches );
+        preg_match_all( '#<a[^>]+?href=[\'"]?([^"\'>]+\.(?:' . $filetypes . '))[\'"]?[^>]*>#i', $html, $matches );
 
         if ( ( bool ) $matches ) {
             $i = 0;
@@ -246,8 +273,8 @@ function rocket_cdn_custom_files( $html ) {
  * @param  string $src URL of the file
  * @return string modified URL
  */
-add_filter( 'style_loader_src', 'rocket_cdn_enqueue', PHP_INT_MAX );
-add_filter( 'script_loader_src', 'rocket_cdn_enqueue', PHP_INT_MAX );
+add_filter( 'style_loader_src', 'rocket_cdn_enqueue', PHP_INT_MAX - 1 );
+add_filter( 'script_loader_src', 'rocket_cdn_enqueue', PHP_INT_MAX - 1 );
 function rocket_cdn_enqueue( $src ) {
 	// Don't use CDN if in admin, in login page, in register page or in a post preview
 	if ( is_admin() || is_preview() || in_array( $GLOBALS['pagenow'], array( 'wp-login.php', 'wp-register.php' ) ) ) {
