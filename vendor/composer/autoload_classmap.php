@@ -204,8 +204,6 @@ return array(
     'WP_Rocket\\Subscriber\\Optimization\\Minify_Subscriber' => $baseDir . '/inc/classes/subscriber/Optimization/class-abstract-minify-subscriber.php',
     'WP_Rocket\\Subscriber\\Optimization\\Remove_Query_String_Subscriber' => $baseDir . '/inc/classes/subscriber/Optimization/class-remove-query-string-subscriber.php',
     'WP_Rocket\\Subscriber\\Third_Party\\Plugins\\Ecommerce\\WooCommerce_Subscriber' => $baseDir . '/inc/classes/subscriber/third-party/plugins/ecommerce/class-woocommerce-subscriber.php',
-    'WP_Rocket\\Third_Party\\Plugins\\Ecommerce\\WC_Factory' => $baseDir . '/inc/classes/third-party/plugins/ecommerce/class-wc-factory.php',
-    'WP_Rocket\\Third_Party\\Plugins\\Ecommerce\\WooCommerce_Compatibility' => $baseDir . '/inc/classes/third-party/plugins/ecommerce/class-woocommerce-compatibility.php',
     'WP_Rocket\\Traits\\Config_Updater' => $baseDir . '/inc/classes/traits/trait-config-updater.php',
     'WP_Rocket_Requirements_Check' => $baseDir . '/inc/classes/class-wp-rocket-requirements-check.php',
 );
