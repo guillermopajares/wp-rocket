@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || die( 'Cheatin&#8217; uh?' );
 define( 'WP_ROCKET_VERSION',               '3.2.2' );
 define( 'WP_ROCKET_WP_VERSION',            '4.7' );
 define( 'WP_ROCKET_PHP_VERSION',           '5.4' );
-define( 'WP_ROCKET_PRIVATE_KEY'         , '9977d5dbca9f4a7565f974658f86803f');
+define( 'WP_ROCKET_PRIVATE_KEY'         , 'ead68da85f015d21399dcafd44815f46');
 define( 'WP_ROCKET_SLUG',                  'wp_rocket_settings' );
 define( 'WP_ROCKET_WEB_MAIN'            , 'https://wp-rocket.me/');
 define( 'WP_ROCKET_WEB_API',               WP_ROCKET_WEB_MAIN . 'api/wp-rocket/' );
